@@ -36,7 +36,11 @@
 		return something;
 	}
 	
-	Bonus: What would most compilers do with this code?
+	Yes, it's safe because it's returning the string by value, so it should always make a copy.
+
+	Bonus: What would most compilers do with this code?]
+		The compiler should apply RVO copy elision, to avoid the unnecessary copy of a temporary string.
+
 8. Why would you use new rather than malloc when allocating an object? Likewise, what's the difference between free and delete?
 	When allocating an object using `new` the class/struct contructor will be called and as well as necessary v-table mapping, as oposed to `malloc` only allocating the memory space. Similarly `delete` will call destructor and virtual destructor chain, `free()` will only free the memory space from the heap. Also `new` and `delete` can be overloaded if necessary.
 
@@ -65,11 +69,23 @@
 		valgrind to debug memory leaks, also had some briefe experience with GDB and Visual Studio memory tools
 
 15. What security concerns have you come across in the past and how have you addressed them?
-	
+	Preventing buffer overflow attack. Using static code analyzers (checkmarx). Following best coding practices. Never leaving a token or passwork hardcoded.
 
 16. Name some tools and/or techniques that you personally find to be the most helpful surrounding development.
-17. Name some tools and/or techniques that you personally find to be the most helpful surrounding code maintenance.   
+	Thinking of what the project MVP is, and how to start implementing its core. Perf and Valgrind and Unit Testing to find problems early in feature development.
+	Regularly talking to other developers and other teams to understand the context and not leaving any doubts.
+
+17. Name some tools and/or techniques that you personally find to be the most helpful surrounding code maintenance.
+	TDD (IMHO TDD is more usefull when we already have a code base and structure to attack the problems by first reproducing them via test).
+	Code review.
+
 18. Scenario: You are dealing with legacy code containing no test suites nor documented requirements, and are required to make a change. Describe your expected process for how you may approach the solution. 
 	a. Consider both a long term and short-term solutions. 
+		Short term solution, I my basic approach is to search for a significant part of the code that I know what it's doing (maybe a UI string, or a class performing a task) relevant to the change I have to make. Using som debug tool (logs/breakpoints) would start validating and trying to understand what the code is doing and what module is doing what and when)
+		Long term I would start writting code documentation, and test suits to document the code.
+
 19. What concerns do you had supporting legacy operating systems? (If any)
+	API changes and library backward compatibility are always the bigest challenges. In embedded systems I also faced kernel incompatibility problems.
+
 20. Tell us about a project you worked on that you found to be interesting or unusual. 
+	Plugpag. A library for integrating third party apps with POS terminals via bluetooth. I was available for Linux, Windows, Android and iOS, and chared the same core C code. Also we had a Java/Kottlin JNI abstraction. It involved challenges of bluetooth syncronization, BT RF tests, app securyty (long discussions on how to ensure security of token storage). It then begame the standard library for 3P payment integration on Pagseguro's Android SmartPOS
