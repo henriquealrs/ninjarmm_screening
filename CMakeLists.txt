@@ -15,7 +15,10 @@ foreach(S IN LISTS STEPS)
 
     FILE(GLOB SRC
         "${PROJ}/*.cpp"
-        "${PROJ}/*.hpp")
+        "${PROJ}/*.hpp"
+        "${PROJ}/src/*.cpp"
+        "${PROJ}/src/*.hpp"
+    )
     add_executable(${PROJ} ${SRC})
 
 endforeach(S IN RANGE 2 5)
