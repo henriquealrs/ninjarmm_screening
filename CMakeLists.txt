@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 LIST(APPEND STEPS 3 5 )
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+
 foreach(S IN LISTS STEPS)
     SET(PROJ "step${S}")
     message(${PROJ})
