@@ -34,6 +34,7 @@ bool queryWindowsForAVSoftwareDataWSC(std::map<std::wstring, ThirdPartyAVSoftwar
     std::wstring displayName, versionNumber, state, timestamp;
     std::string definitionState;
 
+    // I don't know much about windows API, but it seem to me that PtrProducList is missin a ->Release call when exiting
     hr = CoCreateInstance(__uuidof(WSCProductList), NULL, CLSCTX_INPROC_SERVER, __uuidof(IWSCProductList), reinterpret_cast<LPVOID*>(&PtrProductList));
     if (FAILED(hr))
     {
@@ -44,6 +45,7 @@ bool queryWindowsForAVSoftwareDataWSC(std::map<std::wstring, ThirdPartyAVSoftwar
     hr = PtrProductList->Initialize(WSC_SECURITY_PROVIDER_ANTIVIRUS);
     if (FAILED(hr))
     {
+        PtrProductList->Release();
         std::cout << "Failed to query antivirus product list. ";
         return false;
     }
@@ -51,6 +53,7 @@ bool queryWindowsForAVSoftwareDataWSC(std::map<std::wstring, ThirdPartyAVSoftwar
     hr = PtrProductList->get_Count(&ProductCount);
     if (FAILED(hr))
     {
+        PtrProductList->Release();
         std::cout << "Failed to query product count.";
         return false;
     }
@@ -123,6 +126,7 @@ bool queryWindowsForAVSoftwareDataWSC(std::map<std::wstring, ThirdPartyAVSoftwar
         PtrProduct->Release();
     }
 
+    PtrProductList->Release();
     if (thirdPartyAVSoftwareMap.size() == 0)
     {
         return false;
